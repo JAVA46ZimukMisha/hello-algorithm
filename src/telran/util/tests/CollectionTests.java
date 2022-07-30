@@ -23,7 +23,6 @@ Integer[] IntegerObjects = {
 	@BeforeEach
 	void setUp() throws Exception {
 		collection = createCollection();
-		//TODO fill collection
 		for(Integer num: IntegerObjects) {
 			collection.add(num);
 		}
@@ -57,10 +56,10 @@ Integer[] IntegerObjects = {
 		assertTrue(collection.contains(4));
 		assertFalse(collection.contains(8));
 	}
-//	@Test
-//	void sizeTest() {
-//		assertEquals(collection.size(), DEFAULT_SIZE);
-//	}
+	@Test
+	void sizeTest() {
+		assertEquals(collection.size(), DEFAULT_SIZE);
+	}
 	@Test
 	void toArrayTest() {
 		Integer[] expected1 = {1,2,3,4,5};
