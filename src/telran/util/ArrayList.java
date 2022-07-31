@@ -142,8 +142,8 @@ public class ArrayList<T> implements List<T> {
 	}
 
 	@Override
-	public Integer get(int index) {
-		return index >= 0 && index < size ? (Integer) array[index] : null;
+	public T get(int index) {
+		return index >= 0 && index < size ? array[index] : null;
 	}
 
 }
