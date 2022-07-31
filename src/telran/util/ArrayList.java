@@ -19,13 +19,13 @@ public class ArrayList<T> implements List<T> {
 		this(DEFAULT_CAPACITY);
 	}
 
-	private class ArrayListIterator<T> implements Iterator<T> {
+	private class ArrayListIterator implements Iterator<T> {
 		int index = 0;
 
 		@Override
 		public boolean hasNext() {
 
-			return (T) array[index] instanceof T;
+			return array[index] instanceof T;
 		}
 
 		@Override
@@ -33,7 +33,7 @@ public class ArrayList<T> implements List<T> {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			return (T) array[index++];
+			return array[index++];
 		}
 
 	}
@@ -93,7 +93,7 @@ public class ArrayList<T> implements List<T> {
 	@Override
 	public Iterator<T> iterator() {
 
-		return new ArrayListIterator<>();
+		return new ArrayListIterator();
 	}
 
 	@Override
