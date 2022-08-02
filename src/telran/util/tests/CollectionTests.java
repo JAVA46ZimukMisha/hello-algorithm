@@ -38,10 +38,14 @@ Integer[] IntegerObjects = {
 	}
 	@Test
 	void removeTest() {
+		assertTrue(collection.remove(3));
+		assertEquals(collection.size(), DEFAULT_SIZE-1);
 		assertTrue(collection.remove(5));
-		assertEquals(collection.size(), DEFAULT_SIZE - 1);
+		assertEquals(collection.size(), DEFAULT_SIZE-2);
+		assertTrue(collection.remove(1));
+		assertEquals(collection.size(), DEFAULT_SIZE-3);
 		assertFalse(collection.remove(7));
-		assertEquals(collection.size(), DEFAULT_SIZE - 1);
+		assertEquals(collection.size(), DEFAULT_SIZE - 3);
 	}
 	@Test
 	void removeIfTest() {
