@@ -4,70 +4,64 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import telran.util.List;
 
 abstract class ListTests extends CollectionTests {
 
+	List<Integer> list;
+	@BeforeEach
+	@Override
+	void setUp() throws Exception {
+		super.setUp(); // content of the collection is {10, -5, 13, 20, 40, 15} from the setup 
+		list = (List<Integer>)collection; //
+	}
+
 	@Test
 	void addIndexTest() {
-		List<Integer> list = (List<Integer>) collection;
-		assertTrue(list.add(0, 9));
-		assertEquals(list.get(0), 9);
-		assertTrue(list.add(6, 10));
-		assertEquals(list.get(6), 10);
-		assertTrue(list.add(5, 7));
-		assertEquals(list.get(5), 7);
-		for(int i = 0; i<NUMBERS; i++) {
-			assertTrue(list.add(2, (Integer)(int)(Math.random() * Integer.MAX_VALUE)));
+		
+		assertTrue(list.add(0, 30));
+		assertEquals(30, list.get(0));
+		int size = list.size();
+		for(int i = 0; i < N_NUMBERS; i++) {
+			list.add(2, 100);
+			
 		}
-		assertTrue(list.size() == DEFAULT_SIZE+103);
-		assertTrue(list.add(list.size(), 12));
-		assertEquals(list.get(list.size()-1), 12);
-		int newSize = list.size();
-		assertFalse(list.add(-1, 10));
-		assertTrue(list.size()==newSize);
+		assertEquals(size + N_NUMBERS, list.size());
+		assertEquals(100, list.get(2));
+		assertEquals(100, list.get(2 + 100 - 1));
+		size = list.size();
+		assertTrue(list.add(size++, 1000));
+		assertEquals(1000, list.get(size - 1));
+		
 	}
+	
 	@Test
 	void removeIndexTest() {
-		List<Integer> list = (List<Integer>) collection;
-		assertEquals(list.remove(3), 4);
-		assertTrue(list.size()==DEFAULT_SIZE-1);
-		assertEquals(list.get(3), 5);
-		assertEquals(list.remove(0), 1);
-		assertTrue(list.size()==DEFAULT_SIZE-2);
-		assertEquals(list.get(0), 2);
-		assertEquals(list.remove(list.size()-1), 5);
-		assertTrue(list.size()==DEFAULT_SIZE-3);
-		assertEquals(list.get(list.size()-1), 3);
-		assertEquals(list.remove(1),3);
+		int size = list.size();
+		assertEquals(10, list.remove(0));
+		assertEquals(--size, list.size());
+		assertEquals(-5, list.get(0));
+		assertEquals(20, list.remove(2));
+		assertEquals(--size, list.size());
+		assertEquals(15, list.remove(size - 1));
 		assertNull(list.remove(-1));
+		assertNull(list.remove(size));
+		
 	}
 	@Test
 	void indexOfTest() {
-		List<Integer> list = (List<Integer>) collection;
-		list.add(2);
-		assertTrue(list.indexOf(2)==1);
-		assertTrue(list.indexOf(155)==-1);
+		list.add(10);
+		assertEquals(0, list.indexOf(10));
+		assertEquals(-1, list.indexOf(-10));
 	}
 	@Test
 	void lastIndexOfTest() {
-		List<Integer> list = (List<Integer>) collection;
-		list.add(2);
-		assertTrue(list.lastIndexOf(2)==list.size()-1);
-		assertTrue(list.lastIndexOf(155)==-1);
-	}
-	@Test
-	void getTest() {
-		List<Integer> list = (List<Integer>) collection;
-		assertEquals(list.get(0), 1);
-		assertNull(list.get(-1));
-	}
-	@Test
-	void test() {
-		Integer ar[] = new Integer[3];
-		System.out.println(Arrays.toString(ar));
+		list.add(10);
+		assertEquals(list.size() - 1, list.lastIndexOf(10));
+		assertEquals(-1, list.lastIndexOf(-10));
 	}
 
 }
