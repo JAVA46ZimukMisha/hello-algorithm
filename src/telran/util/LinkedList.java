@@ -254,7 +254,6 @@ public class LinkedList<T> implements List<T> {
 	public void reverse() {
 			Node<T> temp = null;
 	        Node<T> current = head;
-	        tail = head;
 		 while (current != null) {
 			 	temp = current.prev;
 	            current.prev = current.next;
