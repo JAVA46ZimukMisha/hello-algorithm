@@ -158,7 +158,7 @@ boolean flNext = false;
 			if(i<oldSize) {
 			array[ind++]=array[i];
 			}else {
-				array[ind] = null;
+				array[ind++] = null;
 				size--;
 			}
 		}
