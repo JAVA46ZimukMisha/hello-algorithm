@@ -151,7 +151,7 @@ boolean flNext = false;
 	public boolean removeIf (Predicate<T> predicate) {
 		int ind = 0;
 		int oldSize = size;
-		for(int i = 0; ind<oldSize;i++) {
+		for(int i = 0; ind<oldSize; i++) {
 			while(i<oldSize && predicate.test(array[i])) {
 				i++;
 			};
