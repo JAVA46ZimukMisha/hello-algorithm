@@ -146,9 +146,6 @@ public class TreeSet<T> implements SortedSet<T> {
 
 	private void removeJunctionNode(Node<T> removeNode) {
 		Node<T> changeRemoveNode = getLeastNodeFrom(removeNode.right);
-		while(isJunction(changeRemoveNode)) {
-			changeRemoveNode = getLeastNodeFrom(removeNode.right);
-		}
 		removeNode.obj = changeRemoveNode.obj;
 		removeNonJunctionNode(changeRemoveNode);
 	}
