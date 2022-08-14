@@ -149,20 +149,29 @@ boolean flNext = false;
 	}
 	@Override
 	public boolean removeIf (Predicate<T> predicate) {
-		int ind = 0;
-		int oldSize = size;
-		for(int i = 0; ind<oldSize; i++) {
-			while(i<oldSize && predicate.test(array[i])) {
-				i++;
-			};
-			if(i<oldSize) {
-			array[ind++]=array[i];
-			}else {
-				array[ind++] = null;
-				size--;
+		boolean res = false;
+		int indDestination = 0;
+		int sizeAfterDeletion = size;
+		for (int indSource = 0; indSource < size; indSource++) {
+			if (predicate.test(array[indSource])) {
+				sizeAfterDeletion--;
+			} else {
+				array[indDestination++] = array[indSource];
 			}
 		}
-		return oldSize>size;
+		res = afterDeletionProcessing(sizeAfterDeletion);
+		return res;
+	}
+	private boolean afterDeletionProcessing(int sizeAfterDeletion) {
+		boolean res = false;
+		if (sizeAfterDeletion < size) {
+			res = true;
+			for (int i = sizeAfterDeletion; i < size; i++) {
+				array[i] = null;
+			}
+			size = sizeAfterDeletion;
+		}
+		return res;
 	}
 
 }
