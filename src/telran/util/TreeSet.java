@@ -74,14 +74,10 @@ public class TreeSet<T> implements SortedSet<T> {
 			if(!flNext) {
 				throw new IllegalStateException();
 			}
-				
+				TreeSet.this.remove(prevNode.obj);
 				if(isJunction(prevNode)) {
-					TreeSet.this.remove(prevNode.obj);
 					current = prevNode;
-				}else {
-					TreeSet.this.remove(prevNode.obj);
 				}
-				
 			flNext = false;
 		}
 		
@@ -150,6 +146,9 @@ public class TreeSet<T> implements SortedSet<T> {
 
 	private void removeJunctionNode(Node<T> removeNode) {
 		Node<T> changeRemoveNode = getLeastNodeFrom(removeNode.right);
+		while(isJunction(changeRemoveNode)) {
+			changeRemoveNode = getLeastNodeFrom(removeNode.right);
+		}
 		removeNode.obj = changeRemoveNode.obj;
 		removeNonJunctionNode(changeRemoveNode);
 	}
