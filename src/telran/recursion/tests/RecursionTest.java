@@ -41,6 +41,11 @@ int count = 0;
 		assertEquals(100, square(-10));
 	}
 	
+	@Test
+	void isSubStrTest() {
+		assertTrue(isSubstring("babushka", "ushk"));
+		assertFalse(isSubstring("babushka", "pap"));
+	}
 //	private void f() {
 //		
 //		if(Math.random() < 0.99) {

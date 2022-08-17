@@ -91,6 +91,30 @@ private static int sum(int firstIndex, int[] ar) {
 		return 0;
 	}
 	return ar[firstIndex] + sum(firstIndex + 1, ar);
-	
+}
+public static boolean isSubstring(String str, String subStr) {
+	return checkChat(str, subStr, 0);
+}
+private static boolean checkChat(String str, String subStr, int ind) {
+	boolean res = false;
+	if(ind>=str.length()-subStr.length()) {
+		return false;
+	}
+	if(str.charAt(ind)==subStr.charAt(0)) {
+		res = checkIfSubStr(str.substring(ind), subStr, 0);
+	}
+	if(res) {
+		return true;
+	}
+	return checkChat(str, subStr, ind+1);
+}
+private static boolean checkIfSubStr(String substring, String subStr, int ind) {
+	if(ind==subStr.length()) {
+		return true;
+	}
+	if(substring.charAt(ind) != subStr.charAt(ind)) {
+		return false;
+	}
+	return checkIfSubStr(substring, subStr, ind+1);
 }
 }
