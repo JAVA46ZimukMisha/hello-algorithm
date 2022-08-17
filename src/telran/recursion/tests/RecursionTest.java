@@ -6,7 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static telran.recursion.LineRecursion.*
-;class RecursionTest {
+;
+
+import java.security.InvalidParameterException;class RecursionTest {
 int count = 0;
 	@BeforeEach
 	void setUp() throws Exception {
@@ -21,6 +23,11 @@ int count = 0;
 		assertEquals(1000, pow(10, 3));
 		assertEquals(-1000, pow(-10, 3));
 		assertEquals(100,pow(-10, 2));
+		assertEquals(1,pow(-10, 0));
+		try {
+		pow(-10, -2);
+		}catch(InvalidParameterException e) {
+		}
 	}
 	@Test
 	void sumTest() {

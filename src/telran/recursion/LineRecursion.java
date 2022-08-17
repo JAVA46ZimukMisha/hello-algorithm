@@ -1,5 +1,7 @@
 package telran.recursion;
 
+import java.security.InvalidParameterException;
+
 public class LineRecursion {
 public static long factorial(int n) {
 	
@@ -23,6 +25,9 @@ public static long factorial(int n) {
 //	return a * pow(a, b - 1);
 //}
 public static int pow(int a, int b) {
+	if(b<0) {
+		throw new InvalidParameterException();
+	}
 	if(b==0) {
 		return 1;
 	}
