@@ -251,18 +251,44 @@ public class LinkedList<T> implements List<T> {
 	 * performs reversing of the objects order
 	 * current - {10, -5, 30} - after reverse - {30, -5. 10}
 	 */
-	public void reverse() {
-		int limit = size / 2 ;
-		Node<T> forwardCurrent = head;
-		Node<T> backwardCurrent = tail;
-		for (int i = 0; i < limit; i++, forwardCurrent = forwardCurrent.next,
-				backwardCurrent = backwardCurrent.prev) {
-			T tmp = forwardCurrent.obj;
-			forwardCurrent.obj = backwardCurrent.obj;
-			backwardCurrent.obj = tmp;
-			
-		}
+	/**
+	 * performs reversing of the objects order
+	 * current - {10, -5, 30} - after reverse - {30, -5. 10}
+	 */
+//	public void reverse() {
+//		int limit = size / 2 ;
+//		Node<T> forwardCurrent = head;
+//		Node<T> backwardCurrent = tail;
+//		for (int i = 0; i < limit; i++, forwardCurrent = forwardCurrent.next,
+//				backwardCurrent = backwardCurrent.prev) {
+//			T tmp = forwardCurrent.obj;
+//			forwardCurrent.obj = backwardCurrent.obj;
+//			backwardCurrent.obj = tmp;
+//			
+//		}
+		public void reverse() {
+			int limit = size / 2 ;
+			Node<T> forwardCurrent = head;
+			Node<T> backwardCurrent = tail;
+			swap(forwardCurrent, backwardCurrent);
+			reverseCurrent(forwardCurrent, backwardCurrent);
+	}
+
+	private void swap(Node<T> forwardCurrent, Node<T> backwardCurrent) {
+		T tmp = forwardCurrent.obj;
+		forwardCurrent.obj = backwardCurrent.obj;
+		backwardCurrent.obj = tmp;
 		
+	}
+
+	private void reverseCurrent(Node<T> forwardCurrent, Node<T> backwardCurrent) {
+		forwardCurrent = forwardCurrent.next;
+		backwardCurrent = backwardCurrent.prev;
+		swap(forwardCurrent, backwardCurrent);
+		if(forwardCurrent.next==backwardCurrent||forwardCurrent.next==backwardCurrent.prev) {
+			return;
+		}
+		reverseCurrent(forwardCurrent, backwardCurrent);
 	}
 
 }

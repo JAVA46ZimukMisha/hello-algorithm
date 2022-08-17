@@ -148,28 +148,23 @@ public class TreeSet<T> implements SortedSet<T> {
 	private void removeJunctionNode(Node<T> removeNode) {
 		Node<T> changeRemoveNode = getLeastNodeFrom(removeNode.right);
 		removeNode.obj = changeRemoveNode.obj;
-		if(changeRemoveNode.parent.left == changeRemoveNode) {
-			changeRemoveNode.parent.left = null;
-		} else{
-			changeRemoveNode.parent.right = null;
-		}
 		removeNonJunctionNode(changeRemoveNode);
 	}
-	private void removeNonJunctionNode(Node<T> removeNode) {
-		Node<T> parent = removeNode.parent;
+	private void removeNonJunctionNode(Node<T> node) {
+		Node<T> child = node.left == null ? node.right : node.left;
+		Node<T> parent = node.parent;
 		if(parent == null) {
-			removeRoot();
-		}else if(parent.right == removeNode) {
-			parent.right = removeNode(removeNode);
-		}else {
-			parent.left = removeNode(removeNode);
+			root = child;
+		} else {
+			if (parent.left == node) {
+				parent.left = child;
+			} else {
+				parent.right = child;
+			}
 		}
-	}
-	private void removeRoot() {
-		Node<T> forRemove = getLeastNodeFrom(root);
-		root.obj = forRemove.obj;
-		removeNode(forRemove);
-		
+		if (child != null) {
+			child.parent = parent;
+		}
 		
 	}
 	private Node<T> removeNode(Node<T> removeNode) {
