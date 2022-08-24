@@ -13,7 +13,7 @@ import telran.util.Collection;
 
 abstract class CollectionTests {
 	protected static final int N_NUMBERS = 10000;
-	protected static final int N_RANDOM_NUMBERS = 10;
+	protected static final int N_RANDOM_NUMBERS = 100;
 	private static final int N_RUNS = 10000;
 	private static final int N_RANDOM_RUNS = 10;
 	protected Collection<Integer> collection;
@@ -21,16 +21,17 @@ abstract class CollectionTests {
 	protected abstract Collection<Integer> createCollection();
 
 	Integer expected[] = { 10, -5, 13, 20, 40, 15 };
+	Integer largeArray[] = new Integer[N_NUMBERS];
 
 	@BeforeEach
 	void setUp() throws Exception {
 		collection = createCollection();
-		fillCollection();
+		fillCollection(expected);
 
 	}
 
-	private void fillCollection() {
-		for (Integer num : expected) {
+	protected void fillCollection(Integer[]array) {
+		for (Integer num : array) {
 			collection.add(num);
 		}
 
@@ -62,10 +63,6 @@ abstract class CollectionTests {
 		// Nothing removed test
 		assertFalse(collection.removeIf(allFalsePredicate));
 		assertEquals(expected.length, collection.size());
-		/**************************************************************/
-		// All removed test
-		assertTrue(collection.removeIf(allFalsePredicate.negate()));
-		assertEquals(0, collection.size());
 		/************************************************************/
 		// even numbers removed test
 		for (int i = 0; i < N_RANDOM_RUNS; i++) {
@@ -75,9 +72,10 @@ abstract class CollectionTests {
 				assertTrue(num % 2 == 1);
 			}
 		}
-		
-
-		
+		/**************************************************************/
+		// All removed test
+		assertTrue(collection.removeIf(allFalsePredicate.negate()));
+		assertEquals(0, collection.size());
 	}
 
 	private void fillRandomCollection() {
@@ -91,6 +89,8 @@ abstract class CollectionTests {
 	@Test
 	void containsTest() {
 		assertTrue(collection.contains(10));
+		assertTrue(collection.contains(-5));
+		assertTrue(collection.contains(40));
 		assertFalse(collection.contains(1000));
 	}
 
@@ -122,20 +122,29 @@ abstract class CollectionTests {
 		wrongRemove(it);
 	}
 
-	@Test
+	//@Test
 	void removeIfPerformanceTest() {
 		Predicate<Integer> predicate = new AllFalsePredicate().negate();
+		fillArraySequence(largeArray);
+		orderLargeArray();
 		for (int i = 0; i < N_RUNS; i++) {
-			fillLargeCollection();
+			fillCollection(largeArray);
 			collection.removeIf(predicate);
 		}
 	}
 
-	private void fillLargeCollection() {
-		for (int i = 0; i < N_NUMBERS; i++) {
-			collection.add((int) (Math.random() * Integer.MAX_VALUE));
-		}
+	
 
+	 protected void orderLargeArray() {
+		
+		
+	}
+
+	void fillArraySequence(Integer[] array) {
+		for(int i = 0; i < array.length; i++) {
+			array[i] = i;
+		}
+		
 	}
 
 	protected void wrongRemove(Iterator<Integer> it) {
@@ -146,6 +155,11 @@ abstract class CollectionTests {
 			flException = true;
 		}
 		assertTrue(flException);
+	}
+	@Test
+	void emptyCollectionTest() {
+		collection = createCollection();
+		assertArrayEquals(new Integer[0], collection.toArray(new Integer[0]));
 	}
 
 }
