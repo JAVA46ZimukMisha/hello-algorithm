@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,22 +58,21 @@ abstract class CollectionTests {
 
 	@Test
 	void removeIfTest() {
-		Predicate<Integer> allFalsePredicate = new AllFalsePredicate();
 		// Nothing removed test
-		assertFalse(collection.removeIf(allFalsePredicate));
+		assertFalse(collection.removeIf(num->false));
 		assertEquals(expected.length, collection.size());
 		/************************************************************/
 		// even numbers removed test
 		for (int i = 0; i < N_RANDOM_RUNS; i++) {
 			fillRandomCollection();
-			collection.removeIf(new EvenNumbersPredicate());
+			collection.removeIf(num->num%2==0);
 			for (int num : collection) {
 				assertTrue(num % 2 == 1);
 			}
 		}
 		/**************************************************************/
 		// All removed test
-		assertTrue(collection.removeIf(allFalsePredicate.negate()));
+		assertTrue(collection.removeIf(n->true));
 		assertEquals(0, collection.size());
 	}
 
@@ -124,12 +122,11 @@ abstract class CollectionTests {
 
 	//@Test
 	void removeIfPerformanceTest() {
-		Predicate<Integer> predicate = new AllFalsePredicate().negate();
 		fillArraySequence(largeArray);
 		orderLargeArray();
 		for (int i = 0; i < N_RUNS; i++) {
 			fillCollection(largeArray);
-			collection.removeIf(predicate);
+			collection.removeIf(n->true);
 		}
 	}
 

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class TreeSet<T> implements SortedSet<T> {
+public class TreeSet<T> extends AbstractCollection<T> implements SortedSet<T> {
 	private static class Node<T> {
 		T obj;
 		Node<T> parent;
@@ -21,7 +21,6 @@ public class TreeSet<T> implements SortedSet<T> {
 	private static final int N_SYMBOLS_PER_LEVEL = 2;
 
 	private Node<T> root;
-	int size;
 	Comparator<T> comp;
 
 	private Node<T> getLeastNodeFrom(Node<T> node) {
@@ -29,14 +28,6 @@ public class TreeSet<T> implements SortedSet<T> {
 			node = node.left;
 		}
 		return node;
-	}
-
-	private Node<T> getGreaterParent(Node<T> node) {
-
-		while (node.parent != null && node.parent.left != node) {
-			node = node.parent;
-		}
-		return node.parent;
 	}
 
 	private class TreeSetIterator implements Iterator<T> {
@@ -63,9 +54,11 @@ public class TreeSet<T> implements SortedSet<T> {
 		}
 
 		private void updateCurrent() {
-			current = current.right != null ? getLeastNodeFrom(current.right) : getGreaterParent(current);
+			current = getNextNode(current);
 
 		}
+
+		
 
 		@Override
 		public void remove() {
@@ -215,11 +208,7 @@ public class TreeSet<T> implements SortedSet<T> {
 		return node != null && comp.compare(tPattern, node.obj) == 0;
 	}
 
-	@Override
-	public int size() {
-
-		return size;
-	}
+	
 
 	@Override
 	public Iterator<T> iterator() {
@@ -327,55 +316,76 @@ public class TreeSet<T> implements SortedSet<T> {
 		}
 
 	}
-
 	public void balance() {
-		Node<T> tmp[] = new Node[size];
-		Node<T> current = getLeastNodeFrom(root);
-		fillNodeArray(tmp, 0, current);
-		balance(tmp, 0, size - 1, null);
+		//TODO
+		//Create sorted Node<T>[];
+		//balance creates new root for each part [left, right] of Node<T>[]
+		//root.left = balance call from left (left, rootIndex - 1)
+		//root.right = balance call from right(rootIndex + 1, right)
+		//don't forget about parent
+		Node<T> [] arrayNodes = getArrayNodes();
+		root = getBalancedRoot(arrayNodes, 0, size - 1, null);
 	}
 
-	private void balance(Node<T> tmp[], int left, int right, Node<T> prev) {
+	private Node<T> getBalancedRoot(Node<T>[] arrayNodes, int left, int right, Node<T> parent) {
+		Node<T> root = null;
 		if (left <= right) {
-			int middle = (left + right) / 2;
-			Node<T> newRoot = tmp[middle];
-			newRoot.parent = prev;
-			if (prev == null) {
-				root = newRoot;
-			} else {
-				insertRoot(newRoot, prev);
+			int indexRoot = (left + right) / 2;
+			root = arrayNodes[indexRoot];
+			root.left = getBalancedRoot(arrayNodes, left, indexRoot - 1, root);
+			root.right = getBalancedRoot(arrayNodes, indexRoot + 1, right, root);
+			root.parent = parent;
+		}
+		return root;
+	}
+
+	private Node<T>[] getArrayNodes() {
+		@SuppressWarnings("unchecked")
+		Node<T> res[] = new Node[size];
+		int index = 0;
+		Node<T> current = getLeastNodeFrom(root);
+		while(current != null) {
+			res[index++] = current;
+			current = getNextNode(current);
+		}
+		return res;
+	}
+	private Node<T> getGreaterParent(Node<T> node) {
+
+		while (node.parent != null && node.parent.left != node) {
+			node = node.parent;
+		}
+		return node.parent;
+	}
+	private Node<T> getNextNode(Node<T> current) {
+		return current.right != null ? getLeastNodeFrom(current.right) :
+			getGreaterParent(current);
+	}
+
+	@Override
+	public T ceiling(T pattern) {
+		for(T num : this) {
+			if(comp.compare(pattern, num)<=0) {
+				return num;
 			}
-			if(left==right) {
-				putNullOnTail(newRoot);
+		}
+		return null;
+	}
+
+	@Override
+	public T floor(T pattern) {
+		T prev = null;
+		for(T num : this) {
+			int compRes = comp.compare(pattern, num);
+			if(compRes == 0) {
+				return num;
 			}
-			prev = newRoot;
-			balance(tmp, left, middle - 1, prev);
-			balance(tmp, middle + 1, right, prev);
+			if(compRes < 0) {
+				return prev;
+			}
+		prev = num;	
 		}
-	}
-
-	private void putNullOnTail(Node<T> newRoot) {
-		newRoot.right = null;
-		newRoot.left = null;
-		
-	}
-
-	private void insertRoot(Node<T> newRoot, Node<T> prev) {
-		if (comp.compare(newRoot.obj, prev.obj) > 0) {
-			prev.right = newRoot;
-		} else {
-			prev.left = newRoot;
-		}
-		
-	}
-
-	private void fillNodeArray(Node<T>[] tmp, int ind, Node<T> current) {
-		if (current != null) {
-			tmp[ind++] = current;
-			current = current.right != null ? getLeastNodeFrom(current.right) : getGreaterParent(current);
-			fillNodeArray(tmp, ind, current);
-		}
-
+		return prev;
 	}
 
 }
